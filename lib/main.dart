@@ -41,12 +41,18 @@ class MyHomePage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;                 // ← Add this.
 
+    final theme = Theme.of(context);       // ← Add this.
+    final welcomeTextStyle = theme.textTheme.displayMedium!.copyWith(
+      // color: theme.colorScheme.onPrimary,
+    );
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,  // ← Add this.
           children: [
             // Text('\n\n\n\n'),
+            Text('Welcome to Hectre', style: welcomeTextStyle,),
             // Text(appState.current.asPascalCase),
             BigCard(pair: pair),                // ← Change to this.
             SizedBox(height: 10),
@@ -77,7 +83,7 @@ class BigCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);       // ← Add this.
     // ↓ Add this.
-    final style = theme.textTheme.displayMedium!.copyWith(
+    final style = theme.textTheme.displaySmall!.copyWith(
       color: theme.colorScheme.onPrimary,
     );
 
