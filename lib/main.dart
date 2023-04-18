@@ -42,21 +42,24 @@ class MyHomePage extends StatelessWidget {
     var pair = appState.current;                 // ← Add this.
 
     return Scaffold(
-      body: Column(
-        children: [
-          Text('\n\n\n\n'),
-          Text('A random AWSOME idea:'),
-          // Text(appState.current.asPascalCase),
-          BigCard(pair: pair),                // ← Change to this.
-          // ↓ Add this.
-          ElevatedButton(
-            onPressed: () {
-              // print('button pressed. hahaha..!');
-              appState.getNext();  // ← This instead of print().
-            },
-            child: Text('Next'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,  // ← Add this.
+          children: [
+            // Text('\n\n\n\n'),
+            // Text(appState.current.asPascalCase),
+            BigCard(pair: pair),                // ← Change to this.
+            SizedBox(height: 10),
+            // ↓ Add this.
+            ElevatedButton(
+              onPressed: () {
+                // print('button pressed. hahaha..!');
+                appState.getNext();  // ← This instead of print().
+              },
+              child: Text('Next'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -83,7 +86,7 @@ class BigCard extends StatelessWidget {
       elevation: 10,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Text(pair.asPascalCase, style: style),
+        child: Text(pair.asPascalCase, style: style, semanticsLabel: "${pair.first} ${pair.second}",),
       ),
     );
   }
