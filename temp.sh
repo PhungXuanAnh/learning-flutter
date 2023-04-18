@@ -11,3 +11,7 @@ flutter doctor --android-licenses
 flutter doctor
 flutter upgrade
 # open android studio, choose Tools -> Device Manager, Create Device..
+
+# install flutter package before run project
+flutter packages get
+flutter packages upgrade
