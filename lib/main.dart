@@ -80,7 +80,11 @@ class MyCustomFormState extends State<MyCustomForm> {
       print(responseBody);
       print(token);
       await prefs.setString('token', token);
-      _showDialogMessageFromDisk(prefs);
+      // _showDialogMessageFromDisk(prefs);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SecondRoute()),
+      );
     } else if (response.statusCode == 401) {
       // _showDialog('Unable to sign in.');
       print(jsonDecode(response.body));
@@ -179,6 +183,35 @@ class MyCustomFormState extends State<MyCustomForm> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Route'),
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          icon:Icon(Icons.arrow_back_ios), 
+          //replace with our own icon data.
+        )
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+            Navigator.pop(context);
+          },
+          child: const Text('Go back!'),
+        ),
       ),
     );
   }
