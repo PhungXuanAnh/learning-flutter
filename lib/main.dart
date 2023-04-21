@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(const MyApp());
 
@@ -85,29 +89,67 @@ class MyCustomFormState extends State<MyCustomForm> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ElevatedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid, or false otherwise.
-                if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                }
+              // onPressed: () {
+              //   // Validate returns true if the form is valid, or false otherwise.
+              //   if (_formKey.currentState!.validate()) {
+              //     // If the form is valid, display a snackbar. In the real world,
+              //     // you'd often call a server or save the information in a database.
+              //     ScaffoldMessenger.of(context).showSnackBar(
+              //       const SnackBar(content: Text('Processing Data')),
+              //     );
+              //   }
 
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      // Retrieve the text the that user has entered by using the
-                      // TextEditingController.
-                      content: Text(usernameController.text + " " + passwordController.text),
-                    );
+              //   showDialog(
+              //     context: context,
+              //     builder: (context) {
+              //       return AlertDialog(
+              //         // Retrieve the text the that user has entered by using the
+              //         // TextEditingController.
+              //         content: Text(usernameController.text + " " + passwordController.text),
+              //       );
+              //     },
+              //   );
+              // },
+              onPressed: () async {
+                      // Use a JSON encoded string to send
+                final response = await http.post(
+                  Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
                   },
+                  body: jsonEncode(<String, String>{
+                    'title': "abc",
+                  }),
                 );
+
+                if (response.statusCode == 201) {
+                  _showDialog('Successfully signed in.');
+                  print(jsonDecode(response.body));
+                } else if (response.statusCode == 401) {
+                  _showDialog('Unable to sign in.');
+                  print(jsonDecode(response.body));
+                } else {
+                  _showDialog('Something went wrong. Please try again.');
+                  print(jsonDecode(response.body));
+                }
               },
               child: const Text('Login'),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDialog(String message) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(message),
+        actions: [
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),
