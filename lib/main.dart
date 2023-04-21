@@ -5,23 +5,50 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const MyApp());
+// void main() => runApp(const MyApp());
+void main() {
+  runApp(
+    MaterialApp(
+      title: 'Named Routes Demo',
+      // Start the app with the "/" named route. In this case, the app starts
+      // on the FirstScreen widget.
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const MyApp(),
+        // When navigating to the "/second" route, build the SecondRoute widget.
+        '/second': (context) => const SecondRoute(),
+      },
+    ),
+  );
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   const appTitle = 'Welcome to Hectre';
+
+  //   return MaterialApp(
+  //     title: appTitle,
+  //     home: Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text(appTitle),
+  //       ),
+  //       body: const MyCustomForm(),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Login to Hectre';
-
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(appTitle),
-        ),
-        body: const MyCustomForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Welcome to Hectre'),
       ),
+      body: const MyCustomForm(),
     );
   }
 }
@@ -81,10 +108,12 @@ class MyCustomFormState extends State<MyCustomForm> {
       print(token);
       await prefs.setString('token', token);
       // _showDialogMessageFromDisk(prefs);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SecondRoute()),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const SecondRoute()),
+      // );
+      // Navigate to the second screen using a named route.
+      Navigator.pushNamed(context, '/second');
     } else if (response.statusCode == 401) {
       // _showDialog('Unable to sign in.');
       print(jsonDecode(response.body));
@@ -123,31 +152,33 @@ class MyCustomFormState extends State<MyCustomForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              // onPressed: () {
-              //   // Validate returns true if the form is valid, or false otherwise.
-              //   if (_formKey.currentState!.validate()) {
-              //     // If the form is valid, display a snackbar. In the real world,
-              //     // you'd often call a server or save the information in a database.
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(content: Text('Processing Data')),
-              //     );
-              //   }
-
-              //   showDialog(
-              //     context: context,
-              //     builder: (context) {
-              //       return AlertDialog(
-              //         // Retrieve the text the that user has entered by using the
-              //         // TextEditingController.
-              //         content: Text(usernameController.text + " " + passwordController.text),
-              //       );
-              //     },
-              //   );
-              // },
-              onPressed: _login,
-              child: const Text('Login'),
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Center(
+              child: ElevatedButton(
+                // onPressed: () {
+                //   // Validate returns true if the form is valid, or false otherwise.
+                //   if (_formKey.currentState!.validate()) {
+                //     // If the form is valid, display a snackbar. In the real world,
+                //     // you'd often call a server or save the information in a database.
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(content: Text('Processing Data')),
+                //     );
+                //   }
+            
+                //   showDialog(
+                //     context: context,
+                //     builder: (context) {
+                //       return AlertDialog(
+                //         // Retrieve the text the that user has entered by using the
+                //         // TextEditingController.
+                //         content: Text(usernameController.text + " " + passwordController.text),
+                //       );
+                //     },
+                //   );
+                // },
+                onPressed: _login,
+                child: const Text('Login'),
+              ),
             ),
           ),
         ],
@@ -211,7 +242,7 @@ class SecondRoute extends StatelessWidget {
             // Navigate back to first route when tapped.
             Navigator.pop(context);
           },
-          child: const Text('Go back!'),
+          child: const Text('Log out'),
         ),
       ),
     );
