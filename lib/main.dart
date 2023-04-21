@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const MyApp());
 
@@ -58,6 +59,37 @@ class MyCustomFormState extends State<MyCustomForm> {
     super.dispose();
   }
 
+  Future<void> _login() async {
+
+    final prefs = await SharedPreferences.getInstance();
+
+    final response = await http.post(
+      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': usernameController.text + " " + passwordController.text,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // _showDialog('Successfully signed in.');
+      var responseBody = jsonDecode(response.body);
+      var token = responseBody["title"];
+      print(responseBody);
+      print(token);
+      await prefs.setString('token', token);
+      _showDialogMessageFromDisk(prefs);
+    } else if (response.statusCode == 401) {
+      // _showDialog('Unable to sign in.');
+      print(jsonDecode(response.body));
+    } else {
+      // _showDialog('Something went wrong. Please try again.');
+      print(jsonDecode(response.body));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
@@ -110,29 +142,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               //     },
               //   );
               // },
-              onPressed: () async {
-                      // Use a JSON encoded string to send
-                final response = await http.post(
-                  Uri.parse('https://jsonplaceholder.typicode.com/albums'),
-                  headers: <String, String>{
-                    'Content-Type': 'application/json; charset=UTF-8',
-                  },
-                  body: jsonEncode(<String, String>{
-                    'title': usernameController.text + " " + passwordController.text,
-                  }),
-                );
-
-                if (response.statusCode == 201) {
-                  _showDialog('Successfully signed in.');
-                  print(jsonDecode(response.body));
-                } else if (response.statusCode == 401) {
-                  _showDialog('Unable to sign in.');
-                  print(jsonDecode(response.body));
-                } else {
-                  _showDialog('Something went wrong. Please try again.');
-                  print(jsonDecode(response.body));
-                }
-              },
+              onPressed: _login,
               child: const Text('Login'),
             ),
           ),
@@ -146,6 +156,23 @@ class MyCustomFormState extends State<MyCustomForm> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(message),
+        actions: [
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDialogMessageFromDisk(SharedPreferences sharedPreferences) {
+    var token = sharedPreferences.getString('token') ?? "There's no token in disk";
+
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(token),
         actions: [
           TextButton(
             child: const Text('OK'),
