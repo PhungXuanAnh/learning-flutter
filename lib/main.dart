@@ -318,7 +318,7 @@ class _SecondRouteState extends State<SecondRoute> {
               future: futureAlbum,
               builder: (context, futureAlbumResult) {
                 if (futureAlbumResult.hasData) {
-                  print(futureAlbumResult.data);
+                  // print(futureAlbumResult.data);
                   // return Text('${futureAlbumResult.data}');
                   var items = futureAlbumResult.data ?? [];
                   return ListView.builder(
