@@ -241,8 +241,47 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-class SecondRoute extends StatelessWidget {
+
+
+Future<List<dynamic>> fetchLot() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = await prefs.getString('token');
+
+  final response = await http.get(
+    Uri.parse('https://develop-app.hectre.com/api/metadata/lots'),
+    headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}'
+    }
+  );
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return jsonDecode(response.body);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+
+
+class SecondRoute extends StatefulWidget {
   const SecondRoute({super.key});
+
+  @override
+  State<SecondRoute> createState() => _SecondRouteState();
+}
+
+class _SecondRouteState extends State<SecondRoute> {
+  late Future<List<dynamic>> futureAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAlbum = fetchLot();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -264,16 +303,42 @@ class SecondRoute extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: items.length,
-              prototypeItem: ListTile(
-                title: Text(items.first),
-              ),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(items[index]),
-                );
-              },
+            // child: ListView.builder(
+            //   itemCount: items.length,
+            //   prototypeItem: ListTile(
+            //     title: Text(items.first),
+            //   ),
+            //   itemBuilder: (context, index) {
+            //     return ListTile(
+            //       title: Text(items[index]),
+            //     );
+            //   },
+            // ),
+            child: FutureBuilder<List<dynamic>>(
+              future: futureAlbum,
+              builder: (context, futureAlbumResult) {
+                if (futureAlbumResult.hasData) {
+                  print(futureAlbumResult.data);
+                  // return Text('${futureAlbumResult.data}');
+                  var items = futureAlbumResult.data ?? [];
+                  return ListView.builder(
+                    itemCount: items.length,
+                    prototypeItem: ListTile(
+                      title: Text('Lot name: ${items.first["name"]}'),
+                    ),
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text('Lot name: ${items[index]["name"]}'),
+                      );
+                    },
+                  );
+                } else if (futureAlbumResult.hasError) {
+                  return Text('${futureAlbumResult.error}');
+                }
+
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              }
             ),
           ),
           SizedBox(height: 50),
