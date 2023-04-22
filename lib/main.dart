@@ -292,14 +292,75 @@ class SecondRoute extends StatelessWidget {
 
 
 
-class CreateLot extends StatelessWidget {
+class CreateLot extends StatefulWidget {
   const CreateLot({super.key});
 
   @override
+  State<CreateLot> createState() => _CreateLotState();
+}
+
+class _CreateLotState extends State<CreateLot> {
+
+  final lotNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    lotNameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _createLot() async {
+
+    final response = await http.post(
+      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': lotNameController.text,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // _showDialog('Successfully signed in.');
+      var responseBody = jsonDecode(response.body);
+      var token = responseBody["title"];
+      print(responseBody);
+      
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text("Create lot successfully"),
+              actions: [
+                TextButton(
+                  child: const Text('OK then exit'),
+                  onPressed: () => {
+                    // Navigate to the second screen using a named route.
+                    Navigator.pushNamed(context, '/second')
+                  },
+                ),
+                TextButton(
+                  child: const Text('Add other lot'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            );
+          },
+        );
+
+    } else if (response.statusCode == 401) {
+      // _showDialog('Unable to sign in.');
+      print(jsonDecode(response.body));
+    } else {
+      // _showDialog('Something went wrong. Please try again.');
+      print(jsonDecode(response.body));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    var items = List<String>.generate(10000, (i) => 'Item $i');
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Enter the information for new lot'),
@@ -307,46 +368,29 @@ class CreateLot extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: items.length,
-              prototypeItem: ListTile(
-                title: Text(items.first),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: TextField(
+              controller: lotNameController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter lot name',
               ),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(items[index]),
-                );
-              },
             ),
           ),
-          SizedBox(height: 50),
-          SafeArea(
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate back to first route when tapped.
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Create'),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate back to first route when tapped.
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Center(
+              child: ElevatedButton(
+              //   onPressed: () => {
+              //     print("aaa")}
+              //   ,
+                onPressed: _createLot,
+                child: const Text('Create'),
+              ),
             ),
           ),
+          
         ],
       ),
     );
