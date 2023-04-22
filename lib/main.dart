@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Welcome to Hectre'),
+        automaticallyImplyLeading: false,
       ),
       body: const MyCustomForm(),
     );
