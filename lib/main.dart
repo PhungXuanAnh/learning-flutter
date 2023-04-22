@@ -397,21 +397,30 @@ class _CreateLotState extends State<CreateLot> {
   }
 
   Future<void> _createLot() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = await prefs.getString('token');
 
     final response = await http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      // Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      // headers: <String, String>{
+      //   'Content-Type': 'application/json; charset=UTF-8',
+      // },
+      // body: jsonEncode(<String, String>{
+      //   'title': lotNameController.text,
+      // }),
+      Uri.parse('https://develop-app.hectre.com/api/metadata/lots'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}'
       },
       body: jsonEncode(<String, String>{
-        'title': lotNameController.text,
+        'name': lotNameController.text,
       }),
     );
 
-    if (response.statusCode == 201) {
-      // _showDialog('Successfully signed in.');
+    // if (response.statusCode == 201) { // for jsonplaceholder
+    if (response.statusCode == 200) { // for hectre api
       var responseBody = jsonDecode(response.body);
-      var token = responseBody["title"];
       print(responseBody);
       
       showDialog(
