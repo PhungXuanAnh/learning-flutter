@@ -224,10 +224,13 @@ class SecondRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var items = List<String>.generate(10000, (i) => 'Item $i');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lot management'),
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // hide back button
         // leading: IconButton(
         //   onPressed: (){
         //     Navigator.pop(context);
@@ -236,14 +239,49 @@ class SecondRoute extends StatelessWidget {
         //   //replace with our own icon data.
         // )
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-            Navigator.pop(context);
-          },
-          child: const Text('Log out'),
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: items.length,
+              prototypeItem: ListTile(
+                title: Text(items.first),
+              ),
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(items[index]),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 50),
+          SafeArea(
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navigate back to first route when tapped.
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Create lot'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navigate back to first route when tapped.
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Log out'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
