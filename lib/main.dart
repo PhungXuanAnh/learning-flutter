@@ -92,35 +92,56 @@ class MyCustomFormState extends State<MyCustomForm> {
     final prefs = await SharedPreferences.getInstance();
 
     final response = await http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      // NOTE: this return 201
+      // Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      // headers: <String, String>{
+      //   'Content-Type': 'application/json; charset=UTF-8',
+      // },
+      // body: jsonEncode(<String, String>{
+      // 'title': usernameController.text + " " + passwordController.text,
+      // }),
+
+      // NOTE: this return 200
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: jsonEncode(<String, String>{
-        'title': usernameController.text + " " + passwordController.text,
-      }),
+      Uri.parse('https://develop-app.hectre.com/api/login'),
+      encoding: Encoding.getByName('utf-8'),
+      body: {
+        "Email": usernameController.text,
+        "Password": passwordController.text
+      },
     );
 
-    if (response.statusCode == 201) {
+    // if (response.statusCode == 201) {  // for jsonplaceholder.typicode.com
+    if (response.statusCode == 200) { // for hectre login
       // _showDialog('Successfully signed in.');
       var responseBody = jsonDecode(response.body);
-      var token = responseBody["title"];
+      print("responseBody: ");
       print(responseBody);
-      print(token);
-      await prefs.setString('token', token);
-      // _showDialogMessageFromDisk(prefs);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const SecondRoute()),
-      // );
-      // Navigate to the second screen using a named route.
-      Navigator.pushNamed(context, '/second');
+      if (responseBody["code"] == 0) {
+          var token = responseBody["message"]["content"];
+          print("token: ");
+          print(token);
+          await prefs.setString('token', token);
+          // _showDialogMessageFromDisk(prefs);
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const SecondRoute()),
+          // );
+          // Navigate to the second screen using a named route.
+          Navigator.pushNamed(context, '/second');
+      } else {
+         _showDialog(responseBody["message"]["content"]);
+      }
+      
     } else if (response.statusCode == 401) {
-      // _showDialog('Unable to sign in.');
       print(jsonDecode(response.body));
+      _showDialog('Unable to sign in.');
     } else {
-      // _showDialog('Something went wrong. Please try again.');
+      print(response.statusCode);
       print(jsonDecode(response.body));
+      _showDialog('Something went wrong. Please try again.');
     }
   }
 
