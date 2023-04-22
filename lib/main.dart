@@ -263,7 +263,10 @@ class SecondRoute extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // Navigate back to first route when tapped.
-                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CreateLot()),
+                      );
                     },
                     child: const Text('Create lot'),
                   ),
@@ -276,6 +279,69 @@ class SecondRoute extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     child: const Text('Log out'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+class CreateLot extends StatelessWidget {
+  const CreateLot({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    var items = List<String>.generate(10000, (i) => 'Item $i');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Enter the information for new lot'),
+        automaticallyImplyLeading: false, // hide back button
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: items.length,
+              prototypeItem: ListTile(
+                title: Text(items.first),
+              ),
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(items[index]),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 50),
+          SafeArea(
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navigate back to first route when tapped.
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Create'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navigate back to first route when tapped.
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
                   ),
                 ),
               ],
