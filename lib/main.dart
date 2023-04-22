@@ -275,8 +275,7 @@ class SecondRoute extends StatelessWidget {
                   padding: const EdgeInsets.all(18.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate back to first route when tapped.
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/');
                     },
                     child: const Text('Log out'),
                   ),
