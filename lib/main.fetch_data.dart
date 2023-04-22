@@ -11,6 +11,7 @@ Future<Album> fetchAlbum() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
+    print(response.body);
     return Album.fromJson(jsonDecode(response.body));
   } else {
     // If the server did not return a 200 OK response,
@@ -71,11 +72,12 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: FutureBuilder<Album>(
             future: futureAlbum,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.title);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
+            builder: (context, futureAlbumResult) {
+              if (futureAlbumResult.hasData) {
+                print(futureAlbumResult.data);
+                return Text(futureAlbumResult.data!.title);
+              } else if (futureAlbumResult.hasError) {
+                return Text('${futureAlbumResult.error}');
               }
 
               // By default, show a loading spinner.
