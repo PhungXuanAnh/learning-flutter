@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Scaffold(
           body: Row(
             children: [
-              SafeArea(
+              SafeArea( // ensures that its child is not obscured by a hardware notch or a status bar. Reference: https://codelabs.developers.google.com/codelabs/flutter-codelab-first#6
                 child: NavigationRail(
                   // extended: false,
                   extended: constraints.maxWidth >= 600,  // ← Here.
