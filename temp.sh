@@ -15,3 +15,7 @@ flutter upgrade
 # install flutter package before run project
 flutter packages get
 flutter packages upgrade
+
+# build
+flutter build apk
+flutter install

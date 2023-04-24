@@ -22,6 +22,10 @@ void main() {
         '/second': (context) => const SecondRoute(),
         '/create_lot': (context) => const CreateLot(),
       },
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 73, 72, 5)),
+      ),
     ),
   );
 }
@@ -51,6 +55,8 @@ class MyApp extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Welcome to Hectre'),
         automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        // backgroundColor: Color.fromARGB(255, 194, 189, 27),
       ),
       body: const MyCustomForm(),
     );
@@ -303,6 +309,7 @@ class _SecondRouteState extends State<SecondRoute> {
         //   icon:Icon(Icons.arrow_back_ios), 
         //   //replace with our own icon data.
         // )
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: Column(
         children: [
@@ -466,6 +473,7 @@ class _CreateLotState extends State<CreateLot> {
       appBar: AppBar(
         title: const Text('Enter the information for new lot'),
         // automaticallyImplyLeading: false, // hide back button, remove this line to show DemoNavDrawer
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: Column(
         children: [
