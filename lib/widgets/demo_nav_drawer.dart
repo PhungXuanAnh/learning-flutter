@@ -27,30 +27,20 @@ class DemoNavDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.input),
+              leading: Icon(Icons.border_color),
               title: Text('Create lot'),
               onTap: () => {
                 Navigator.pushNamed(context, '/create_lot')
               },
             ),
             ListTile(
-              leading: Icon(Icons.input),
-              title: Text('Welcome'),
-              onTap: () => {},
-            ),
-            ListTile(
               leading: Icon(Icons.verified_user),
-              title: Text('Profile'),
+              title: Text('About'),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Settings'),
-              onTap: () => {Navigator.of(context).pop()},
-            ),
-            ListTile(
-              leading: Icon(Icons.border_color),
-              title: Text('Feedback'),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
