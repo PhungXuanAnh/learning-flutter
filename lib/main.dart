@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'widgets/demo_nav_drawer.dart';
+
 // void main() => runApp(const MyApp());
 void main() {
   runApp(
@@ -289,9 +291,10 @@ class _SecondRouteState extends State<SecondRoute> {
     var items = List<String>.generate(10000, (i) => 'Item $i');
 
     return Scaffold(
+      drawer: DemoNavDrawer(),
       appBar: AppBar(
         title: const Text('Lot management'),
-        automaticallyImplyLeading: false, // hide back button
+        // automaticallyImplyLeading: false, // hide back button, remove this line to show DemoNavDrawer
         // leading: IconButton(
         //   onPressed: (){
         //     Navigator.pop(context);
@@ -346,7 +349,8 @@ class _SecondRouteState extends State<SecondRoute> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(18.0),
+                  // padding: const EdgeInsets.all(18.0),
+                  padding: const EdgeInsets.only(left: 150, bottom: 20),
                   child: ElevatedButton(
                     onPressed: () {
                       // Navigate back to first route when tapped.
@@ -358,15 +362,15 @@ class _SecondRouteState extends State<SecondRoute> {
                     child: const Text('Create lot'),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/');
-                    },
-                    child: const Text('Log out'),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(18.0),
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       Navigator.pushNamed(context, '/');
+                //     },
+                //     child: const Text('Log out'),
+                //   ),
+                // ),
               ],
             ),
           ),
