@@ -20,6 +20,7 @@ void main() {
         '/': (context) => const MyApp(),
         // When navigating to the "/second" route, build the SecondRoute widget.
         '/second': (context) => const SecondRoute(),
+        '/create_lot': (context) => const CreateLot(),
       },
     ),
   );
@@ -461,9 +462,10 @@ class _CreateLotState extends State<CreateLot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: DemoNavDrawer(),
       appBar: AppBar(
         title: const Text('Enter the information for new lot'),
-        automaticallyImplyLeading: false, // hide back button
+        // automaticallyImplyLeading: false, // hide back button, remove this line to show DemoNavDrawer
       ),
       body: Column(
         children: [
@@ -477,17 +479,33 @@ class _CreateLotState extends State<CreateLot> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: Center(
-              child: ElevatedButton(
-              //   onPressed: () => {
-              //     print("aaa")}
-              //   ,
-                onPressed: _createLot,
-                child: const Text('Create'),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: Center(
+                  child: ElevatedButton(
+                  //   onPressed: () => {
+                  //     print("aaa")}
+                  //   ,
+                    onPressed: _createLot,
+                    child: const Text('Create'),
+                  ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: Center(
+                  child: ElevatedButton(
+                  //   onPressed: () => {
+                  //     print("aaa")}
+                  //   ,
+                    onPressed: () => {Navigator.pushNamed(context, '/second')},
+                    child: const Text('Cancel'),
+                  ),
+                ),
+              ),
+            ],
           ),
           
         ],

@@ -21,6 +21,20 @@ class DemoNavDrawer extends StatelessWidget {
             // ),
             ListTile(
               leading: Icon(Icons.input),
+              title: Text('Lot Management'),
+              onTap: () => {
+                Navigator.pushNamed(context, '/second')
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.input),
+              title: Text('Create lot'),
+              onTap: () => {
+                Navigator.pushNamed(context, '/create_lot')
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.input),
               title: Text('Welcome'),
               onTap: () => {},
             ),
